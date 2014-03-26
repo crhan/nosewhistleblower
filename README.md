@@ -11,6 +11,18 @@ Notify the completion and status for all your tests running in the background
 - python
 - nose
 
+#### OS X
+
+terminal-notifier
+
+    brew install terminal-notifier
+
+#### Linux
+
+- [libnotify](https://developer.gnome.org/notification-spec/)
+- [PyGObject](https://wiki.gnome.org/action/show/Projects/PyGObject?action=show&redirect=PyGObject)
+
+
 ### Usage
 
 	python setup.py install
