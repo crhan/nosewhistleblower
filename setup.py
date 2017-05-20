@@ -25,5 +25,6 @@ setup(
         'nose.plugins.0.10': [
             'NoseWhistleblower = nosewhistleblower.plugin:NoseWhistleblower'
         ]
-    }
+    },
+    include_package_data=True,
 )
