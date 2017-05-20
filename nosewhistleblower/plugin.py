@@ -1,11 +1,12 @@
-__author__ = 'francisl'
-
 import logging
 import os
 import sys
-import json
-import socket
+
 from nose.plugins import Plugin
+
+
+__author__ = 'francisl'
+
 
 log = logging.getLogger(__name__)
 ch = logging.StreamHandler()
@@ -18,16 +19,28 @@ class Notifier(object):
 
     @staticmethod
     def notify_mac(result, runner, name, msg):
-        t = '-title {!r}'.format("%s - %s" % (runner, "Success" if result.wasSuccessful() else "Failed"))
+        t = '-title {!r}'.format(
+            "%s - %s" % (
+                runner,
+                "Success" if result.wasSuccessful() else "Failed"
+            ))
         s = '-subtitle {!r}'.format(name)
-        os.system('terminal-notifier {}'.format(' '.join([t, s, msg])))
+        if result.wasSuccessful():
+            icon = './pic/success.png'
+        else:
+            icon = './pic/failure.png'
+
+        icon_path = os.path.join(os.path.dirname(__file__), icon)
+
+        i = '-appIcon {}'.format(icon_path)
+        os.system('terminal-notifier {}'.format(' '.join([t, s, i, msg])))
 
     @staticmethod
     def notify_linux(result, runner, name, msg):
         from gi.repository import Notify
         Notify.init("%s" % runner)
-        notification = Notify.Notification.new (name, msg, runner)
-        notification.show ()
+        notification = Notify.Notification.new(name, msg, runner)
+        notification.show()
 
     @staticmethod
     def notify(result, runner, name):
@@ -37,7 +50,8 @@ class Notifier(object):
             handler = Notifier.notify_linux
 
         msg = '-message "Success: %s | Failures: %s | Errors: %s | Skipped: %s"' % \
-                (result.testsRun, len(result.failures), len(result.errors), len(result.skipped))
+            (result.testsRun, len(result.failures),
+             len(result.errors), len(result.skipped))
         handler(result, runner, name, msg)
 
 
